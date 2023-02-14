@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <input id="value" type="number" />
+    <button type="button" onclick="getNumber()">Click Me!</button>
+    <div>计算结果:<span id="result"></span> </div>
+  </body>
+  <script type="text/javascript">
+    const getNumber = function () {
+      const value = document.getElementById("value").value;
+      fetch("./fib.wasm")
+        .then((res) => {
+          return res.arrayBuffer(); //引入到内存中,使其在array buffer中可用
+        })
+        .then(WebAssembly.instantiate) //编译和实例化 WebAssembly 代码
+        .then((module) => {
+          let res = module.instance.exports.fib(value);
+          document.getElementById("result").innerHTML = res;
+        });
+    };
+  </script>
+</html>
